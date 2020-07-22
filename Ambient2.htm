@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://ocrdetect.qq.com/ocrdetect/ambient.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Ambient Light Sensor</title>
+ 
+  </head>
+  <body class="brightLight">
+    <h1>Ambient Light Sensor</h1>
+    <p>Current light intensity is <b id="value">unknown</b>.</p>
+
+<div id="box"></div>
+  
+  <script>
+function update(illuminance) {
+  document.getElementById("value").innerHTML = illuminance + " lux";
+
+  var colorPart = Math.min(255, illuminance).toFixed(0);
+  document.getElementById("box").style.backgroundColor =
+    "rgb(" + colorPart + ", " + colorPart + ", " + colorPart + ")";
+}
+
+if ("AmbientLightSensor" in window) {
+  try {
+    var sensor = new AmbientLightSensor();
+    sensor.addEventListener("reading", function (event) {
+      update(sensor.illuminance);
+    });
+    sensor.start();
+  } catch (e) {
+    console.error(e);
+  }
+}
+if ("ondevicelight" in window) {
+  function onUpdateDeviceLight(event) {
+    update(event.value);
+  }
+  
+  window.addEventListener("devicelight", onUpdateDeviceLight);
+}
+
+  </script>
+</body></html>

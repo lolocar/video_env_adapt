@@ -1,0 +1,126 @@
+<!DOCTYPE html> 
+<html> 
+<body> 
+
+ <video controls id="myVideo">
+    <source src="https://storage.googleapis.com/webfundamentals-assets/videos/chrome.webm" type="video/webm">
+    <source src="https://storage.googleapis.com/webfundamentals-assets/videos/chrome.mp4" type="video/mp4">
+    <p>This browser does not support the video element.</p>
+  </video>
+
+
+<table><tr><td>Video Time</td><td><p id="input2">0</p></td><td> / Speed</td><td><p id="input1">1.0</p></td></tr></table>
+<script>
+	/*<table>
+<tr><td>Start</td><td>Stop</td><td>Speed</td></tr>
+<tr><td>861</td><td>906</td><td>2.0</td></tr>
+<tr><td>974</td><td>1016</td><td>2.0</td></tr>
+<tr><td>1047</td><td>1186</td><td>2.0</td></tr>
+<tr><td>1212</td><td>1260</td><td>2.0</td></tr>
+<tr><td>1269</td><td>1322</td><td>2.0</td></tr>
+<tr><td>1344</td><td>1598</td><td>2.0</td></tr>
+<tr><td>1791</td><td>1813</td><td>2.0</td></tr>
+<tr><td>1956</td><td>1984</td><td>2.0</td></tr>
+<tr><td>2277</td><td>2338</td><td>2.0</td></tr>
+<tr><td>2350</td><td>2371</td><td>2.0</td></tr></table>
+*/
+</script>
+<style type="text/css">
+.green {
+    color: #00FF00;
+    border-style: none;
+}
+.yellow {
+    color: #a87f32;
+    border-style: none;
+}
+.black {
+    color: #000000;
+    border-style: none;
+}
+
+</style>
+
+<script>
+var vid = document.getElementById("myVideo");
+
+vid.addEventListener("timeupdate",function(){
+    var timeDisplay;
+	timeDisplay = Math.floor(vid.currentTime);
+	console.log(Math.floor(vid.currentTime));
+/*	if(timeDisplay<108) {	setPlaySpeed(2.0);
+} else if(timeDisplay>861 && timeDisplay<906) { setPlaySpeed(2.0)
+} else if(timeDisplay>974 && timeDisplay<1016) { setPlaySpeed(2.0)
+} else if(timeDisplay>1047 && timeDisplay<1186) { setPlaySpeed(2.0)
+} else if(timeDisplay>1212 && timeDisplay<1260) { setPlaySpeed(2.0)
+} else if(timeDisplay>1269 && timeDisplay<1322) { setPlaySpeed(2.0)
+} else if(timeDisplay>1344 && timeDisplay<1598) { setPlaySpeed(2.0)
+} else if(timeDisplay>1791 && timeDisplay<1813) { setPlaySpeed(2.0)
+} else if(timeDisplay>1956 && timeDisplay<1984) { setPlaySpeed(2.0)
+} else if(timeDisplay>2277 && timeDisplay<2338) { setPlaySpeed(2.0)
+} else if(timeDisplay>2350 && timeDisplay<2371) { setPlaySpeed(2.0)
+	} else { 
+		setPlaySpeed(1.2);
+	}
+  */	document.getElementById('input2').innerHTML = timeDisplay;
+
+},false);
+
+function getPlaySpeed() { 
+  alert(vid.playbackRate);
+} 
+
+function setPlaySpeed(x){ 
+  vid.playbackRate = x;
+  document.getElementById('input1').innerHTML = x;
+  if(x==1.2)
+  {
+	document.getElementById('input1').style.color = "red";
+  }
+  else if (x==2)
+  {
+  document.getElementById('input1').style.color = "green";  
+  }
+
+} 
+
+function setPlaySpeedFast() { 
+  vid.playbackRate = 2;
+} 
+function update(illuminance) {
+  document.getElementById("value").innerHTML = illuminance + " lux";
+
+  var colorPart = Math.min(255, illuminance).toFixed(0);
+  document.getElementById("box").style.backgroundColor =
+    "rgb(" + colorPart + ", " + colorPart + ", " + colorPart + ")";
+}
+
+if ("AmbientLightSensor" in window) {
+  try {
+    var sensor = new AmbientLightSensor();
+    sensor.addEventListener("reading", function (event) {
+      update(sensor.illuminance);
+      
+      vid.style.filter = "brightness("+(sensor.illuminance/70+80)+"%)";  
+    });
+    sensor.start();
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+if ("ondevicelight" in window) {
+  function onUpdateDeviceLight(event) {
+    update(event.value);
+  }
+  
+  window.addEventListener("devicelight", onUpdateDeviceLight);
+}
+</script> 
+<div><p>Current light intensity is <b id="value">unknown</b>.</p>
+
+<div id="box"></div>
+<p>TEST.</p>
+chrome://flags/#enable-generic-sensor
+</body> 
+</html>
